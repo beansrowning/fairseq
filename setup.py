@@ -204,21 +204,7 @@ def get_files(path, relative_to="fairseq"):
     return all_files
 
 
-try:
-    # symlink examples into fairseq package so package_data accepts them
-    fairseq_examples = os.path.join("fairseq", "examples")
-    if "build_ext" not in sys.argv[1:] and not os.path.exists(fairseq_examples):
-        if os.name == "nt":
-            shutil.copytree("examples", fairseq_examples)
-        else:
-            os.symlink(os.path.join("..", "examples"), fairseq_examples)
-    package_data = {
-        "fairseq": get_files("fairseq/config") + get_files("fairseq/examples"),
-    }
-    do_setup(package_data)
-finally:
-    if "build_ext" not in sys.argv[1:] and os.path.exists(fairseq_examples):
-        if os.name == "nt":
-            shutil.rmtree(fairseq_examples)
-        else:
-            os.unlink(fairseq_examples)
+package_data = {
+    "fairseq": get_files("fairseq/config"),
+}
+do_setup(package_data)
